@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ef8df0">
+  <title>プロフィール作成</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #ef8df0;
+      --ink: #000;
+      --field: #d6d6d6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: var(--page);
+      color: var(--ink);
+      font-family: "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+    }
+
+    main {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 20px 36px 11px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 50px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .photo-picker {
+      position: relative;
+      display: grid;
+      width: 144px;
+      height: 144px;
+      margin: 12px auto 37px;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .photo-picker svg,
+    .photo-picker img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .photo-picker svg {
+      fill: none;
+      stroke: var(--ink);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 8;
+    }
+
+    .photo-picker img {
+      display: none;
+      object-fit: cover;
+      border: 8px solid var(--ink);
+      border-radius: 50%;
+    }
+
+    .photo-picker.has-photo svg {
+      display: none;
+    }
+
+    .photo-picker.has-photo img {
+      display: block;
+    }
+
+    .photo-label {
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      bottom: 17px;
+      left: 0;
+      width: max-content;
+      margin: auto;
+      padding: 0 3px;
+      background: var(--page);
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dark-field,
+    .light-field {
+      display: block;
+      width: 100%;
+      height: 50px;
+      border: 0;
+      border-radius: 12px;
+      font: inherit;
+      text-align: center;
+    }
+
+    .dark-field {
+      background: var(--ink);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .dark-field::placeholder {
+      color: #fff;
+      opacity: 1;
+    }
+
+    .dark-field + .dark-field {
+      margin-top: 37px;
+    }
+
+    .light-fields {
+      display: grid;
+      gap: 0;
+      margin-top: 24px;
+    }
+
+    .light-field {
+      padding: 0 12px;
+      background: var(--field);
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .light-field::placeholder {
+      color: var(--ink);
+      opacity: 1;
+    }
+
+    .light-fields .light-field + .light-field {
+      margin-top: -2px;
+    }
+
+    .private-label {
+      margin: 17px 0 0;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      text-align: center;
+    }
+
+    .private-field {
+      margin-top: 0;
+      font-weight: 400;
+    }
+
+    input:focus-visible,
+    button:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 359px) {
+      main {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>プロフィール作成</h1>
+
+    <button class="photo-picker" id="photo-picker" type="button" aria-label="写真を選択">
+      <svg viewBox="0 0 144 144" aria-hidden="true">
+        <circle cx="72" cy="72" r="68"></circle>
+        <circle cx="72" cy="49" r="27"></circle>
+        <path d="M27 132c3-29 20-52 45-52s42 23 45 52"></path>
+      </svg>
+      <img id="photo-preview" alt="">
+      <span class="photo-label">写真を選択</span>
+    </button>
+    <input class="visually-hidden" id="photo-input" type="file" accept="image/*" aria-label="プロフィール写真">
+
+    <form class="profile-form" autocomplete="off">
+      <input class="dark-field" type="text" name="name" placeholder="名前を入力" aria-label="名前">
+      <input class="dark-field" type="text" name="profile" placeholder="プロフィール" aria-label="プロフィール">
+
+      <div class="light-fields">
+        <input class="light-field" type="text" name="hobby" placeholder="趣味" aria-label="趣味">
+        <input class="light-field" type="text" name="school" placeholder="出身校" aria-label="出身校">
+        <input class="light-field" type="text" name="class" placeholder="クラス" aria-label="クラス">
+        <input class="light-field" type="text" name="about" placeholder="ひとこと" aria-label="ひとこと">
+      </div>
+
+      <p class="private-label">他人からは見えない</p>
+      <input class="light-field private-field" type="text" name="type" placeholder="タイプ" aria-label="タイプ">
+    </form>
+  </main>
+
+  <script>
+    const photoPicker = document.querySelector("#photo-picker");
+    const photoInput = document.querySelector("#photo-input");
+    const photoPreview = document.querySelector("#photo-preview");
+    let previewUrl;
+
+    photoPicker.addEventListener("click", () => photoInput.click());
+    photoInput.addEventListener("change", () => {
+      const photo = photoInput.files[0];
+      if (!photo) return;
+
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = URL.createObjectURL(photo);
+      photoPreview.src = previewUrl;
+      photoPicker.classList.add("has-photo");
+    });
+  </script>
+</body>
+</html>
